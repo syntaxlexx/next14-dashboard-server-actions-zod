@@ -18,6 +18,7 @@ import { fetchUsers } from "@/lib/data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Filters from "./filters";
 import Pagination from "@/components/pagination";
+import { deleteUser } from "@/lib/actions";
 
 interface Props {
   searchParams: {
@@ -84,9 +85,13 @@ const Page = async ({ searchParams: { q, page } }: Props) => {
                     <Link href={url}>
                       <Button size="sm">View</Button>
                     </Link>
-                    <Button size="sm" variant="destructive">
-                      Delete
-                    </Button>
+
+                    <form action={deleteUser}>
+                      <input type="hidden" value={item.id} name="id" />
+                      <Button size="sm" variant="destructive">
+                        Delete
+                      </Button>
+                    </form>
                   </TableCell>
                 </TableRow>
               );

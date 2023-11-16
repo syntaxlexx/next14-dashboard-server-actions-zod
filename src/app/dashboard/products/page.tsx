@@ -15,6 +15,7 @@ import { formatDate } from "@acelords/js-utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Product } from "@/types";
 import Link from "next/link";
+import { deleteProduct } from "@/lib/actions";
 
 const products: Product[] = [
   {
@@ -82,9 +83,12 @@ const Page = async ({}: Props) => {
                 </TableCell>
                 <TableCell className="flex flex-wrap gap-2">
                   <Button size="sm">View</Button>
-                  <Button size="sm" variant="destructive">
-                    Delete
-                  </Button>
+                  <form action={deleteProduct}>
+                    <input type="hidden" value={item.id} name="id" />
+                    <Button size="sm" variant="destructive" type="submit">
+                      Delete
+                    </Button>
+                  </form>
                 </TableCell>
               </TableRow>
             ))}

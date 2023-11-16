@@ -1,10 +1,11 @@
 'use server'
 
 import { revalidatePath } from "next/cache";
-import { User } from "./models";
+import { Product, User } from "./models";
 import { redirect } from "next/navigation";
 import { connectToDB } from "./db";
 import bcrypt from 'bcrypt'
+import { boolean } from 'boolean';
 
 export const addUser = async (formData) => {
     const {
@@ -28,8 +29,8 @@ export const addUser = async (formData) => {
             address,
             email,
             img,
-            isActive: Boolean(isActive),
-            isAdmin: Boolean(isAdmin),
+            isActive: boolean(isActive),
+            isAdmin: boolean(isAdmin),
             password: hashedPassword,
             phone,
             username,
@@ -44,4 +45,82 @@ export const addUser = async (formData) => {
 
     revalidatePath('/dashboard/users')
     redirect('/dashboard/users')
+}
+
+
+export const deleteUser = async (formData) => {
+    const {
+        id
+    } = Object.fromEntries(formData)
+
+    try {
+        connectToDB()
+
+        await User.findByIdAndDelete(id)
+
+    } catch (error) {
+        console.log("error", error);
+        throw new Error('Failed to delete the user')
+    }
+
+    revalidatePath('/dashboard/users')
+}
+
+
+export const addProduct = async (formData) => {
+    const {
+        cat,
+        color,
+        currency,
+        price,
+        desc,
+        img,
+        size,
+        stock,
+        title,
+    } = Object.fromEntries(formData)
+
+    try {
+        connectToDB()
+
+        const newProduct = new Product({
+            cat,
+            color,
+            currency,
+            price,
+            desc,
+            img,
+            size,
+            stock,
+            title,
+        })
+
+        await newProduct.save()
+
+    } catch (error) {
+        console.log("error", error);
+        throw new Error('Failed to save new product')
+    }
+
+    revalidatePath('/dashboard/products')
+    redirect('/dashboard/products')
+}
+
+
+export const deleteProduct = async (formData) => {
+    const {
+        id
+    } = Object.fromEntries(formData)
+
+    try {
+        connectToDB()
+
+        await Product.findByIdAndDelete(id)
+
+    } catch (error) {
+        console.log("error", error);
+        throw new Error('Failed to delete the product')
+    }
+
+    revalidatePath('/dashboard/products')
 }
