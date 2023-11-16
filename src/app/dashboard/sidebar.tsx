@@ -38,17 +38,17 @@ const menuItems: MenuSection[] = [
       },
       {
         title: "Users",
-        path: "/users",
+        path: "/dashboard/users",
         icon: <Users className={iconClass} />,
       },
       {
         title: "Products",
-        path: "/products",
+        path: "/dashboard/products",
         icon: <ShoppingBag className={iconClass} />,
       },
       {
         title: "Transactions",
-        path: "/transactions",
+        path: "/dashboard/transactions",
         icon: <Wallet className={iconClass} />,
       },
     ],
@@ -58,17 +58,17 @@ const menuItems: MenuSection[] = [
     list: [
       {
         title: "Revenue",
-        path: "/revenue",
+        path: "/dashboard/revenue",
         icon: <BarChart2 className={iconClass} />,
       },
       {
         title: "Reports",
-        path: "/reports",
+        path: "/dashboard/reports",
         icon: <LineChart className={iconClass} />,
       },
       {
         title: "Teams",
-        path: "/teams",
+        path: "/dashboard/teams",
         icon: <Users2 className={iconClass} />,
       },
     ],
@@ -78,7 +78,7 @@ const menuItems: MenuSection[] = [
     list: [
       {
         title: "Settings",
-        path: "/settings",
+        path: "/dashboard/settings",
         icon: <Settings className={iconClass} />,
       },
       {
