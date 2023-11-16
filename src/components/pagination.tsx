@@ -18,7 +18,7 @@ const Pagination: FC<Props> = ({ perPage = 2, total }) => {
   const page = searchParams.get("page") || 1;
   const params = new URLSearchParams(searchParams);
 
-  const totalPages = Math.floor(total / perPage);
+  const totalPages = Math.ceil(total / perPage);
 
   const hasPrev = perPage * (Number(page) - 1) > 0;
   const hasNext = perPage * (Number(page) - 1) + perPage < total;
