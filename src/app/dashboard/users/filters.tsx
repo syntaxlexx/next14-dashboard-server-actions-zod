@@ -18,6 +18,9 @@ const Filters: FC<Props> = ({ query }) => {
   const handleSearch = useDebouncedCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const params = new URLSearchParams(searchParams);
+
+      params.set("page", "1");
+
       if (e.target.value) {
         {
           if (e.target.value.length >= 2) {

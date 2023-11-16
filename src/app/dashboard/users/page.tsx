@@ -17,17 +17,22 @@ import Link from "next/link";
 import { fetchUsers } from "@/lib/data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Filters from "./filters";
+import Pagination from "@/components/pagination";
 
 interface Props {
   searchParams: {
     q: string;
+    page: string;
   };
 }
 
-const Page = async ({ searchParams: { q } }: Props) => {
+const Page = async ({ searchParams: { q, page } }: Props) => {
   const query = decodeURI(q ?? "");
 
-  const users = await fetchUsers({q:query});
+  const { count, users } = await fetchUsers({
+    q: query,
+    page: page ? Number(page) : 1,
+  });
 
   return (
     <Card>
@@ -91,6 +96,11 @@ const Page = async ({ searchParams: { q } }: Props) => {
                 Total
               </TableCell>
               <TableCell className="text-right">{users.length}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell colSpan={5}>
+                <Pagination total={count} perPage={2} />
+              </TableCell>
             </TableRow>
           </TableFooter>
         </Table>
