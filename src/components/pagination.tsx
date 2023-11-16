@@ -18,6 +18,8 @@ const Pagination: FC<Props> = ({ perPage = 2, total }) => {
   const page = searchParams.get("page") || 1;
   const params = new URLSearchParams(searchParams);
 
+  const totalPages = Math.floor(total / perPage);
+
   const hasPrev = perPage * (Number(page) - 1) > 0;
   const hasNext = perPage * (Number(page) - 1) + perPage < total;
 
@@ -35,6 +37,9 @@ const Pagination: FC<Props> = ({ perPage = 2, total }) => {
         <ChevronLeft className="w-4 h-4 pr-1" />
         Prev
       </Button>
+      <div>
+        Showing {perPage} of {total} items &middot; Page {page}/{totalPages}
+      </div>
       <Button disabled={!hasNext} onClick={(e) => handleClick("next")}>
         Next <ChevronRight className="w-4 h-4 pl-1" />
       </Button>

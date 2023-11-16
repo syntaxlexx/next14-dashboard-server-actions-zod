@@ -40,7 +40,9 @@ const Page = async ({ searchParams: { q, page } }: Props) => {
         <div className="flex flex-col md:flex-row md:justify-between items-center">
           <Filters query={query} />
 
-          <Button>Add New</Button>
+          <Link href={`/dashboard/users/new`}>
+            <Button>Add New</Button>
+          </Link>
         </div>
 
         <Table>
