@@ -38,7 +38,6 @@ const Filters: FC<Props> = ({ query }) => {
         placeholder="Search for a user"
         onChange={handleSearch}
         className="pr-4"
-        // value={q}
       />
 
       <Search className="w-4 text-slate-500 absolute top-0 bottom-0 right-2 grid h-full items-center" />
