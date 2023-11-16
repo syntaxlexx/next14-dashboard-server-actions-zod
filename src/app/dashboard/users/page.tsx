@@ -69,7 +69,7 @@ const Page = async ({ searchParams: { q, page } }: Props) => {
                       className="font-medium flex items-center gap-2"
                     >
                       <Avatar>
-                        <AvatarImage src={item.img} alt="@shadcn" />
+                        <AvatarImage src={item.img} alt="avatar" />
                         <AvatarFallback>
                           {item.username.substring(0, 1)}
                         </AvatarFallback>

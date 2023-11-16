@@ -48,6 +48,68 @@ export const addUser = async (formData) => {
 }
 
 
+export const fetchUser = async (id: string | number) => {
+    try {
+        connectToDB()
+
+        return await User.findById(id)
+    } catch (error) {
+        console.log("error", error);
+        throw new Error('Failed to get the user')
+    }
+}
+
+
+export const updateUser = async (formData) => {
+    const {
+        id,
+        address,
+        email,
+        img,
+        isActive,
+        isAdmin,
+        phone,
+        username,
+        password,
+    } = Object.fromEntries(formData)
+
+    try {
+        const updateFields = {
+            address,
+            email,
+            img,
+            isActive,
+            isAdmin,
+            phone,
+            username,
+        }
+
+        Object.keys(updateFields).forEach(key => (updateFields[key] === "" || undefined) && delete updateFields[key])
+
+        updateFields['isActive'] = boolean(isActive)
+        updateFields['isAdmin'] = boolean(isAdmin)
+
+        if (password && password.length > 0) {
+            const salt = await bcrypt.genSalt(10)
+            const hashedPassword = await bcrypt.hash(password, salt)
+
+            updateFields['password'] = hashedPassword
+        }
+
+        connectToDB()
+
+        await User.findByIdAndUpdate(id, updateFields)
+
+    } catch (error) {
+        console.log("error", error);
+        throw new Error('Failed to update new user')
+    }
+
+    revalidatePath(`/dashboard/users`)
+    redirect('/dashboard/users')
+}
+
+
 export const deleteUser = async (formData) => {
     const {
         id
