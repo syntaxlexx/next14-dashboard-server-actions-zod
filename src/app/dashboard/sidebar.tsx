@@ -13,6 +13,8 @@ import {
 import Image from "next/image";
 import MenuLink from "./menu-link";
 import { ReactNode } from "react";
+import { auth, signOut } from "@/lib/auth";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export type MenuItem = {
   title: string;
@@ -93,19 +95,25 @@ const menuItems: MenuSection[] = [
 interface Props {}
 
 const Sidebar = async ({}: Props) => {
+  const session = await auth();
+
+  const user = session?.user;
+
   return (
     <div>
       <div className="flex items-center gap-2">
-        <Image
-          src="https://i.pravatar.cc/150?u=john"
-          alt="user"
-          width={50}
-          height={50}
-          className="rounded-full object-cover"
-        />
+        <Avatar className="w-20 h-20">
+          <AvatarImage src={user?.img} />
+          <AvatarFallback>
+            {user?.username.substring(0, 1) ?? "A"}
+          </AvatarFallback>
+        </Avatar>
+
         <div className="flex flex-col">
-          <span className="font-semibold text-lg">John Doe</span>
-          <span>Admin</span>
+          <span className="font-semibold text-lg">{user?.username}</span>
+          <span className="opacity-50">
+            {user?.isAdmin ? "Admin" : "Client"}
+          </span>
         </div>
       </div>
 
@@ -124,10 +132,19 @@ const Sidebar = async ({}: Props) => {
           </li>
         ))}
         <li>
-          <button className="ml-6 min-w-[180px] flex items-center gap-2 hover:bg-slate-700 px-4 py-1.5 rounded-lg">
-            <LogOut className={iconClass} />
-            <span>Logout</span>
-          </button>
+          <form
+            action={async () => {
+              "use server";
+              await signOut({
+                redirectTo: "/login",
+              });
+            }}
+          >
+            <button className="ml-6 min-w-[180px] flex items-center gap-2 hover:bg-slate-700 px-4 py-1.5 rounded-lg">
+              <LogOut className={iconClass} />
+              <span>Logout</span>
+            </button>
+          </form>
         </li>
       </ul>
     </div>

@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { connectToDB } from "./db";
 import bcrypt from 'bcrypt'
 import { boolean } from 'boolean';
+import { signIn } from "./auth";
 
 export const addUser = async (formData) => {
     const {
@@ -228,4 +229,18 @@ export const deleteProduct = async (formData) => {
     }
 
     revalidatePath('/dashboard/products')
+}
+
+export const authenticate = async (formData) => {
+    const { username, password } = Object.fromEntries(formData)
+
+    try {
+        await signIn('credentials', {
+            username, password,
+            redirectTo: '/dashboard',
+        })
+    } catch (error) {
+        console.log("error", error);
+        throw new Error('Failed to authenticate')
+    }
 }

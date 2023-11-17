@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { authenticate } from "@/lib/actions";
 
 interface Props {}
 
@@ -19,7 +20,7 @@ const Page = async ({}: Props) => {
           <CardDescription>Provide your credentials</CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
-          <form action="" className="space-y-4">
+          <form action={authenticate} className="space-y-4">
             <Input type="text" name="username" placeholder="Username/email" />
             <Input type="password" name="password" placeholder="Password" />
             <Button type="submit" className="w-full">
