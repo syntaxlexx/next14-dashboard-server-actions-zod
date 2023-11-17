@@ -38,6 +38,7 @@ const Content: FC<Props> = ({}) => {
 
   const submit = async (payload: CreateUserRequest) => {
     try {
+      setIsLoading(true);
       const resp = await addUserZod(payload);
 
       if (resp && !resp.success) {
@@ -58,6 +59,8 @@ const Content: FC<Props> = ({}) => {
       toast.error(error?.message, {
         description: "Try again.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
