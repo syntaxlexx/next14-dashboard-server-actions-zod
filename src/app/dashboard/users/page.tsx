@@ -18,7 +18,8 @@ import { fetchUsers } from "@/lib/data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Filters from "./filters";
 import Pagination from "@/components/pagination";
-import { deleteUser } from "@/lib/actions";
+import { deleteUser, deleteUserClient } from "@/lib/actions";
+import DeleteClient from "./delete-client";
 
 interface Props {
   searchParams: {
@@ -41,9 +42,14 @@ const Page = async ({ searchParams: { q, page } }: Props) => {
         <div className="flex flex-col md:flex-row md:justify-between items-center">
           <Filters query={query} />
 
-          <Link href={`/dashboard/users/new`}>
-            <Button>Add New</Button>
-          </Link>
+          <div className="flex gap-2">
+            <Link href={`/dashboard/users/new`}>
+              <Button>Add New</Button>
+            </Link>
+            <Link href={`/dashboard/users/new-zod`}>
+              <Button>Add New (Zod)</Button>
+            </Link>
+          </div>
         </div>
 
         <Table>
@@ -88,10 +94,12 @@ const Page = async ({ searchParams: { q, page } }: Props) => {
 
                     <form action={deleteUser}>
                       <input type="hidden" value={item.id} name="id" />
-                      <Button size="sm" variant="destructive">
+                      <Button size="sm" variant="destructive" type="submit">
                         Delete
                       </Button>
                     </form>
+
+                    <DeleteClient id={item.id} />
                   </TableCell>
                 </TableRow>
               );

@@ -1,3 +1,14 @@
+export type ActionResponse = {
+    success: boolean,
+    data?: any,
+}
+
+export type ActionValidationError = ActionResponse & {
+    errors: Record<string, string | boolean>,
+    message: string,
+    isValidationError: boolean
+}
+
 export type IUser = {
     username: string;
     password: string;

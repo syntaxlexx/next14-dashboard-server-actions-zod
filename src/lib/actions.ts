@@ -1,12 +1,15 @@
 'use server'
 
-import { revalidatePath } from "next/cache";
-import { Product, User } from "./models";
-import { redirect } from "next/navigation";
-import { connectToDB } from "./db";
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
 import { boolean } from 'boolean';
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { ZodError } from 'zod';
 import { signIn } from "./auth";
+import { connectToDB } from "./db";
+import { Product, User } from "./models";
+import { returnValidationError } from './server-utils';
+import { CreateUserRequest, CreateUserValidator } from "./validators";
 
 export const addUser = async (formData) => {
     const {
@@ -40,6 +43,50 @@ export const addUser = async (formData) => {
         await newUser.save()
 
     } catch (error) {
+        console.log("error", error);
+        throw new Error('Failed to save new user')
+    }
+
+    revalidatePath('/dashboard/users')
+    redirect('/dashboard/users')
+}
+
+export const addUserZod = async (payload: CreateUserRequest) => {
+    try {
+        const {
+            address,
+            email,
+            img,
+            isActive,
+            isAdmin,
+            password,
+            phone,
+            username,
+        } = CreateUserValidator.parse(payload)
+
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
+
+        connectToDB()
+
+        const newUser = new User({
+            address,
+            email,
+            img,
+            isActive: boolean(isActive),
+            isAdmin: boolean(isAdmin),
+            password: hashedPassword,
+            phone,
+            username,
+        })
+
+        await newUser.save()
+
+    } catch (error) {
+        if (error instanceof ZodError) {
+            return returnValidationError(error)
+        }
+
         console.log("error", error);
         throw new Error('Failed to save new user')
     }
@@ -127,6 +174,20 @@ export const deleteUser = async (formData) => {
     }
 
     revalidatePath('/dashboard/users')
+}
+
+export const deleteUserClient = async (input: { id: string }) => {
+    try {
+        connectToDB()
+
+        await User.findByIdAndDelete(input.id + 'invalid')
+        revalidatePath('/dashboard/users')
+
+    } catch (error) {
+        // console.log("error", error);
+        throw new Error('Failed to delete the user: ', error?.message)
+    }
+
 }
 
 
