@@ -1,13 +1,12 @@
 "use server";
 
-import { ActionValidationError } from "@/types";
+import { ActionValidationError, MongoServerError } from "@/types";
 import { ZodError } from "zod";
 
 export const formatZodValidationErrors = (error: ZodError) => {
   const errors: Record<string, string> = {};
 
-  error.errors.forEach((er) => {
-    console.log("er", er);
+  error.issues.forEach((er) => {
     errors[er.path[0]] = er.message;
   });
 
@@ -33,7 +32,7 @@ export const returnValidationError = (
   return errors;
 };
 
-export const checkIfDuplicationError = (err: Error) => {
+export const checkIfDuplicationError = (err: any) => {
   if (err?.code === 11000 || err?.code === 11001) {
     const key = Object.keys(err?.keyPattern)[0];
     return `[DUPLICATE] '${key}' already exists`;

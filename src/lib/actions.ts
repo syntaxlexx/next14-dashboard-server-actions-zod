@@ -1,5 +1,6 @@
 'use server'
 
+import UserRepository from '@/data/user-repository';
 import bcrypt from 'bcrypt';
 import { boolean } from 'boolean';
 import { revalidatePath } from "next/cache";
@@ -10,7 +11,6 @@ import { connectToDB } from "./db";
 import { Product, User } from "./models";
 import { returnValidationError } from './server-utils';
 import { CreateUserRequest, CreateUserValidator } from "./validators";
-import UserRepository from '@/data/user-repository';
 
 export const addUser = async (formData) => {
     const {

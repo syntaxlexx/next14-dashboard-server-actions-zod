@@ -12,4 +12,3 @@ export const CreateUserValidator = z.object({
 })
 
 export type CreateUserRequest = z.infer<typeof CreateUserValidator>
-

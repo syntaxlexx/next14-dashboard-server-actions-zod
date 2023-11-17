@@ -35,3 +35,6 @@ export type IProduct = {
     createdAt: Date,
     updatedAt: Date,
 }
+
+
+export type MongoServerError = Error & { code: number, keyPattern: Record<string, string> }
