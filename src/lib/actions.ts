@@ -10,6 +10,7 @@ import { connectToDB } from "./db";
 import { Product, User } from "./models";
 import { returnValidationError } from './server-utils';
 import { CreateUserRequest, CreateUserValidator } from "./validators";
+import UserRepository from '@/data/user-repository';
 
 export const addUser = async (formData) => {
     const {
@@ -64,23 +65,20 @@ export const addUserZod = async (payload: CreateUserRequest) => {
             username,
         } = CreateUserValidator.parse(payload)
 
-        const salt = await bcrypt.genSalt(10)
-        const hashedPassword = await bcrypt.hash(password, salt)
-
-        connectToDB()
-
-        const newUser = new User({
+        const resp = await new UserRepository().create({
             address,
             email,
             img,
-            isActive: boolean(isActive),
-            isAdmin: boolean(isAdmin),
-            password: hashedPassword,
+            isActive,
+            isAdmin,
+            password,
             phone,
             username,
         })
 
-        await newUser.save()
+        if (!resp) {
+            throw new Error('Repo error')
+        }
 
     } catch (error) {
         if (error instanceof ZodError) {
@@ -88,7 +86,12 @@ export const addUserZod = async (payload: CreateUserRequest) => {
         }
 
         console.log("error", error);
-        throw new Error('Failed to save new user')
+
+        if (error?.message && String(error.message).includes('[DUPLICATE]')) {
+            throw new Error(`${error?.message}`)
+        }
+
+        throw new Error(`Failed to save new user`)
     }
 
     revalidatePath('/dashboard/users')

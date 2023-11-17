@@ -32,3 +32,12 @@ export const returnValidationError = (
 
   return errors;
 };
+
+export const checkIfDuplicationError = (err: Error) => {
+  if (err?.code === 11000 || err?.code === 11001) {
+    const key = Object.keys(err?.keyPattern)[0];
+    return `[DUPLICATE] '${key}' already exists`;
+  }
+
+  return false;
+};

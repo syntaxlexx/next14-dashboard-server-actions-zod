@@ -55,7 +55,9 @@ const Content: FC<Props> = ({}) => {
       }
     } catch (error) {
       console.log("error", error);
-      toast.error("Could not add user", { description: "Try again." });
+      toast.error(error?.message, {
+        description: "Try again.",
+      });
     }
   };
 
