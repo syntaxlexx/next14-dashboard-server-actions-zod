@@ -1,3 +1,11 @@
+# Next14 Admin Dashboard (ft. Zod, mongoose, Server Actions, Shadcn-UI/TailwindCSS, NextAuth, recharts, React-hook-form)
+
+![Screenshot 1](public/screenshot-1.png)
+
+![Screenshot 3](public/screenshot-3.png)
+
+![Screenshot 2](public/screenshot-2.png)
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
